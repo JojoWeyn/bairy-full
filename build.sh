@@ -1,28 +1,32 @@
 #!/bin/bash
 
-set -e  # Остановиться при ошибке
+set -e
 
-echo "🧹 Очистка старых сборок..."
+echo "📦 Сборка client (bairy-new)..."
+docker build -t client-builder -f ./bairy-new/Dockerfile ./bairy-new
+
+echo "📦 Сборка admin (bairy-full/admin)..."
+docker build -t admin-builder -f ./bairy-full/admin/Dockerfile ./bairy-full/admin
+
+echo "🧹 Очистка старых билдов..."
 rm -rf ./reverse-proxy/client ./reverse-proxy/admin
 mkdir -p ./reverse-proxy/client ./reverse-proxy/admin
 
-echo "📦 Сборка client..."
-docker build -t client-builder -f ./bairy-new/client/Dockerfile ./bairy-new/client
-
-echo "📦 Сборка admin..."
-docker build -t admin-builder -f ./bairy-new/admin/Dockerfile ./bairy-new/admin
-
-echo "🚢 Извлекаем билды из контейнеров..."
+echo "🚢 Извлекаем client билд..."
 docker create --name tmp-client client-builder
 docker cp tmp-client:/app/dist ./reverse-proxy/client
 docker rm tmp-client
 
+echo "🚢 Извлекаем admin билд..."
 docker create --name tmp-admin admin-builder
 docker cp tmp-admin:/app/dist ./reverse-proxy/admin
 docker rm tmp-admin
 
-echo "🚢 Сборка и запуск Nginx..."
-docker build -t my-nginx -f ./reverse-proxy/Dockerfile ./nginx
-docker run -d -p 80:80 --name nginx-server my-nginx
+echo "🚢 Сборка Nginx контейнера..."
+docker build -t my-nginx -f ./reverse-proxy/Dockerfile ./reverse-proxy
 
-echo "✅ Готово: http://localhost"
+echo "🚀 Запуск Nginx..."
+docker rm -f nginx-server 2>/dev/null || true
+docker run -d --name nginx-server -p 80:80 my-nginx
+
+echo "✅ Готово! Nginx поднят на http://<IP-сервера>"
