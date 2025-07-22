@@ -25,11 +25,7 @@ docker create --name tmp-admin admin-builder
 docker cp tmp-admin:/app/dist ./reverse-proxy/admin
 docker rm tmp-admin
 
-echo "🚢 Сборка Nginx контейнера..."
-docker build -t my-nginx -f ./reverse-proxy/Dockerfile ./reverse-proxy
-
-echo "🚀 Запуск Nginx..."
-docker rm -f nginx-server 2>/dev/null || true
-docker run -d --name nginx-server -p 80:80 my-nginx
+echo "🚀 Запуск docker-compose..."
+docker-compose -f ./docker-compose.yml up -d
 
 echo "✅ Готово! Nginx поднят на http://<IP-сервера>"
