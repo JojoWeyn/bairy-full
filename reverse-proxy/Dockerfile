@@ -1,6 +1,6 @@
 FROM nginx:stable-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 COPY ./client /usr/share/nginx/html/
 COPY ./admin /usr/share/nginx/html/admin/
 
