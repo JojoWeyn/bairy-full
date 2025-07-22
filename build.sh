@@ -8,6 +8,9 @@ docker build -t client-builder -f ./bairy-new/Dockerfile ./bairy-new
 echo "📦 Сборка admin (admin)..."
 docker build -t admin-builder -f ./admin/Dockerfile ./admin
 
+echo "📦 Запуск бека"
+docker build -t backend-builder -f ./backend/Dockerfile ./backend
+
 echo "🧹 Очистка старых билдов..."
 rm -rf ./reverse-proxy/client ./reverse-proxy/admin
 mkdir -p ./reverse-proxy/client ./reverse-proxy/admin
