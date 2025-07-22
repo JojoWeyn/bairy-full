@@ -17,7 +17,7 @@ RUN go mod tidy
 COPY . .
 
 # Сборка с включённым CGO
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -o main ./cmd/app
+RUN CGO_ENABLED=1 GOOS=linux go build -o main ./cmd/app
 
 # Stage 2: Runtime (glibc-based)
 FROM debian:bookworm-slim
