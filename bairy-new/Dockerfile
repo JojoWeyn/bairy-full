@@ -1,8 +1,11 @@
-FROM node:20
+# Stage 1: Build
+FROM node:20 AS builder
 
 WORKDIR /app
 COPY . .
 RUN npm install --legacy-peer-deps
+RUN npm run build
 
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+# Stage 2: Just output build (can be skipped if you use volumes)
+FROM scratch AS export-stage
+COPY --from=builder /app/dist /dist

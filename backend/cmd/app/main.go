@@ -17,12 +17,11 @@ func main() {
 	defer cancel()
 
 	app, err := composite.NewComposite(logger, []string{
-		"http://localhost:3000",
+		"http://localhost:5173",
+		"http://localhost:5174",
 		"http://localhost",
 		"http://XN----7SBABE0CDK5CN0I.XN--P1AI",
-		"http://admin.XN----7SBABE0CDK5CN0I.XN--P1AI",
 		"https://XN----7SBABE0CDK5CN0I.XN--P1AI",
-		"https://admin.XN----7SBABE0CDK5CN0I.XN--P1AI",
 	}, "7342348758:AAGLsUaeXYBX9G0v6q84PGyqEKTXv2xijL8", 445089168)
 	if err != nil {
 		logger.Fatalf("Failed to initialize application: %v", err)
