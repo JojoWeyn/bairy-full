@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend/uploads:/app/uploads
+    container_name: go-backend
+    restart: always
+    ports:
+      - "8080:8080"
+
+  client:
+    build:
+      context: ./bairy-new
+    container_name: client-builder
+    command: sh -c "echo 'built client'" # не запускается, нужен только билд
+    volumes:
+      - ./client/dist:/dist
+
+  admin:
+    build:
+      context: ./admin
+    container_name: admin-builder
+    command: sh -c "echo 'built admin'" # не запускается, нужен только билд
+    volumes:
+      - ./admin/dist:/dist
+
+  nginx:
+    build:
+      context: ./reverse-proxy
+    container_name: nginx-gateway
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
