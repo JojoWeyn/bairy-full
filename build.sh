@@ -8,7 +8,7 @@ docker build -t client-builder -f ./bairy-new/Dockerfile ./bairy-new
 echo "📦 Сборка admin (admin)..."
 docker build -t admin-builder -f ./admin/Dockerfile ./admin
 
-echo "📦 Запуск бека"
+echo "📦 Сборка backend..."
 docker build -t backend-builder -f ./backend/Dockerfile ./backend
 
 echo "🧹 Очистка старых билдов..."
@@ -25,7 +25,8 @@ docker create --name tmp-admin admin-builder
 docker cp tmp-admin:/app/dist ./reverse-proxy/admin
 docker rm tmp-admin
 
-echo "🚀 Запуск docker-compose..."
-docker-compose -f ./docker-compose.yml up -d
+echo "🚀 Запуск backend контейнера..."
+docker rm -f backend-server 2>/dev/null || true
+docker run -d --name backend-server -p 8080:8080 backend-builder
 
-echo "✅ Готово! Nginx поднят на http://<IP-сервера>"
+echo "✅ Готово! Backend запущен, фронты собраны, nginx на сервере ждет обновлений."
