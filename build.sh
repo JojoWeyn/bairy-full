@@ -5,8 +5,8 @@ set -e
 echo "📦 Сборка client (bairy-new)..."
 docker build -t client-builder -f ./bairy-new/Dockerfile ./bairy-new
 
-echo "📦 Сборка admin (bairy-full/admin)..."
-docker build -t admin-builder -f ./bairy-full/admin/Dockerfile ./bairy-full/admin
+echo "📦 Сборка admin (admin)..."
+docker build -t admin-builder -f ./admin/Dockerfile ./admin
 
 echo "🧹 Очистка старых билдов..."
 rm -rf ./reverse-proxy/client ./reverse-proxy/admin
