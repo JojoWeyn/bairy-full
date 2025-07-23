@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path="/"
+          path="/admin/login"
           element={
             <AuthRoute>
               <AdminLogin />
